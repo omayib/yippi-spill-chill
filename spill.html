@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Yippi! Spill & Chill 🍦✨</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Paytone+One&display=swap" rel="stylesheet"/>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    :root{--y:#FFE135;--o:#FF6B35;--pk:#FF3D8A;--pu:#A855F7;--cy:#00D4FF;--dk:#0A0718;--card:#13102A;--card2:#1C1740;--tx:#F0EBFF;--mt:#8B7FAA;--br:rgba(168,85,247,.22);--sp:#E4405F;}
+    *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+    body{font-family:'Nunito',sans-serif;background:var(--dk);color:var(--tx);overflow-x:hidden;}
+    .bb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(80px);}
+    .b1{width:50vw;height:50vw;top:-15%;left:-15%;background:radial-gradient(circle,rgba(168,85,247,.2),transparent 70%);}
+    .b2{width:45vw;height:45vw;bottom:-10%;right:-10%;background:radial-gradient(circle,rgba(255,61,138,.16),transparent 70%);}
+    .b3{width:30vw;height:30vw;top:40%;left:40%;background:radial-gradient(circle,rgba(0,212,255,.1),transparent 70%);}
+    .noise{position:fixed;inset:0;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none;z-index:1;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content:space-between;align-items:center;padding:13px 20px;background:rgba(10,7,24,.9);backdrop-filter:blur(18px);border-bottom:1px solid var(--br);}
+    .nav-logo{font-family:'Paytone One',sans-serif;font-size:1.35rem;background:linear-gradient(90deg,var(--y),var(--o));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .nav-acts{display:flex;gap:9px;align-items:center;}
+    .nav-btn{background:linear-gradient(135deg,var(--pu),var(--pk));color:#fff;border:none;padding:8px 15px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.76rem;cursor:pointer;text-decoration:none;transition:transform .2s;box-shadow:0 4px 14px rgba(168,85,247,.28);}
+    .nav-btn:hover{transform:scale(1.04);}
+    .nav-dash{background:linear-gradient(135deg,var(--o),var(--pk));color:#fff;border:none;padding:8px 15px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.76rem;cursor:pointer;text-decoration:none;transition:transform .2s;}
+    .nav-dash:hover{transform:scale(1.04);}
+    .content{position:relative;z-index:2;}
+    .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:100px 24px 70px;position:relative;}
+    .dco{position:absolute;pointer-events:none;font-size:2rem;opacity:.13;animation:fltD 4s ease-in-out infinite;}
+    @keyframes fltD{0%,100%{transform:translateY(0) rotate(-5deg);}50%{transform:translateY(-14px) rotate(5deg);}}
+    .badge{display:inline-block;background:rgba(255,225,53,.1);border:1px solid rgba(255,225,53,.3);color:var(--y);font-size:.67rem;font-weight:800;padding:5px 14px;border-radius:50px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;animation:fuUp .6s ease both;}
+    h1.hero-h{font-family:'Paytone One',sans-serif;font-size:clamp(2.5rem,10vw,4.8rem);line-height:1.05;letter-spacing:-1px;margin-bottom:14px;animation:fuUp .7s ease .1s both;}
+    .gt{background:linear-gradient(90deg,var(--y),var(--o),var(--pk));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .hero-sub{font-size:clamp(.88rem,3.5vw,1.08rem);color:var(--mt);max-width:390px;line-height:1.65;margin-bottom:32px;animation:fuUp .7s ease .2s both;}
+    .hero-sub strong{color:var(--y);font-weight:900;}
+    .hero-cta{display:flex;gap:11px;flex-wrap:wrap;justify-content:center;animation:fuUp .7s ease .3s both;}
+    .btn-p{background:linear-gradient(135deg,var(--o),var(--pk));color:#fff;border:none;padding:13px 26px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.93rem;cursor:pointer;text-decoration:none;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 26px rgba(255,61,138,.36);display:inline-block;}
+    .btn-p:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(255,61,138,.54);}
+    .btn-o{background:rgba(168,85,247,.1);border:1.5px solid rgba(168,85,247,.42);color:var(--pu);padding:13px 26px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.93rem;cursor:pointer;text-decoration:none;transition:all .2s;display:inline-block;}
+    .btn-o:hover{background:rgba(168,85,247,.2);color:#fff;}
+    .prize-chip{margin-top:36px;background:rgba(255,225,53,.07);border:1px solid rgba(255,225,53,.2);border-radius:16px;padding:14px 26px;animation:fuUp .7s ease .4s both;}
+    .prize-chip p{font-size:.76rem;color:var(--mt);margin-bottom:3px;}
+    .prize-chip strong{font-size:1.75rem;font-family:'Paytone One',sans-serif;color:var(--y);}
+    .scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);color:var(--mt);font-size:.66rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;animation:bnce 1.8s infinite;display:flex;flex-direction:column;align-items:center;gap:4px;}
+    @keyframes bnce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(7px);}}
+    .sec{padding:52px 24px;max-width:480px;margin:0 auto;}
+    .sec-lbl{font-size:.67rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--cy);margin-bottom:9px;}
+    .sec-ttl{font-family:'Paytone One',sans-serif;font-size:clamp(1.5rem,5.5vw,2rem);line-height:1.15;margin-bottom:26px;}
+    .dvdr{height:1px;background:linear-gradient(90deg,transparent,var(--br),transparent);margin:0 24px;}
+    .steps{display:flex;flex-direction:column;gap:12px;}
+    .sc{background:var(--card);border:1px solid var(--br);border-radius:16px;padding:16px;display:flex;align-items:flex-start;gap:13px;transition:transform .2s,border-color .2s;}
+    .sc:hover{transform:translateX(4px);border-color:rgba(168,85,247,.48);}
+    .sn{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:'Paytone One',sans-serif;font-size:1rem;flex-shrink:0;}
+    .s1{background:linear-gradient(135deg,var(--y),var(--o));color:var(--dk);}
+    .s2{background:linear-gradient(135deg,var(--pk),var(--pu));color:#fff;}
+    .s3{background:linear-gradient(135deg,var(--cy),var(--pu));color:var(--dk);}
+    .si h3{font-size:.9rem;font-weight:800;margin-bottom:3px;}
+    .si p{font-size:.78rem;color:var(--mt);line-height:1.52;}
+    .pills{display:flex;gap:9px;margin-top:22px;flex-wrap:wrap;}
+    .pill{display:flex;align-items:center;gap:7px;padding:9px 15px;border-radius:50px;font-weight:800;font-size:.8rem;}
+    .psv{background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.28);color:var(--cy);}
+    .psh{background:rgba(255,61,138,.1);border:1px solid rgba(255,61,138,.28);color:var(--pk);}
+    .pts{font-family:'Paytone One',sans-serif;font-size:1rem;}
+    /* FLOW */
+    .flow{display:flex;flex-direction:column;gap:0;}
+    .fi2{display:flex;gap:14px;position:relative;}
+    .fi2:not(:last-child)::before{content:'';position:absolute;left:18px;top:38px;bottom:-6px;width:2px;background:linear-gradient(180deg,var(--pu),transparent);z-index:0;}
+    .fdot{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;position:relative;z-index:1;margin-bottom:18px;}
+    .fd1{background:linear-gradient(135deg,var(--pu),var(--pk));}
+    .fd2{background:linear-gradient(135deg,var(--o),var(--y));}
+    .fd3{background:linear-gradient(135deg,var(--cy),var(--pu));}
+    .fd4{background:linear-gradient(135deg,var(--pk),var(--o));}
+    .ft h4{font-size:.9rem;font-weight:800;margin-bottom:2px;}
+    .ft p{font-size:.78rem;color:var(--mt);line-height:1.5;}
+    .fbadge{display:inline-block;font-size:.65rem;font-weight:800;padding:2px 9px;border-radius:50px;margin-top:5px;}
+    .fbg{background:rgba(66,133,244,.12);border:1px solid rgba(66,133,244,.3);color:#4285F4;}
+    .fbi{background:rgba(228,64,95,.12);border:1px solid rgba(228,64,95,.28);color:var(--sp);}
+    .fbd{background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.28);color:var(--pu);}
+    /* AUTH GATE */
+    .auth-gate{background:var(--card);border:1px solid var(--br);border-radius:22px;padding:26px 20px;max-width:480px;margin:0 auto 60px;position:relative;overflow:hidden;}
+    .auth-gate::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--y),var(--o),var(--pk),var(--pu));}
+    .ag-title{font-family:'Paytone One',sans-serif;font-size:1.25rem;margin-bottom:5px;}
+    .ag-sub{font-size:.8rem;color:var(--mt);margin-bottom:22px;line-height:1.55;}
+    .gbtn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:#3c4043;border:none;padding:13px 18px;border-radius:11px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;transition:box-shadow .2s,transform .2s;box-shadow:0 2px 8px rgba(0,0,0,.18);}
+    .gbtn:hover{box-shadow:0 4px 18px rgba(0,0,0,.26);transform:translateY(-1px);}
+    .gbtn svg{width:19px;height:19px;flex-shrink:0;}
+    .gbtn.ok{background:rgba(34,213,117,.08);border:1.5px solid rgba(34,213,117,.3);color:#22D575;}
+    .dor{display:flex;align-items:center;gap:11px;margin:18px 0;color:var(--mt);font-size:.76rem;font-weight:700;}
+    .dor::before,.dor::after{content:'';flex:1;height:1px;background:var(--br);}
+    .ubar{display:none;align-items:center;gap:10px;padding:10px 13px;background:rgba(34,213,117,.06);border:1px solid rgba(34,213,117,.22);border-radius:11px;margin-bottom:18px;}
+    .ubar.show{display:flex;}
+    .ubar img{width:30px;height:30px;border-radius:50%;border:2px solid rgba(34,213,117,.35);}
+    .ubar .ubn{font-weight:800;font-size:.83rem;}
+    .ubar .ube{font-size:.7rem;color:var(--mt);}
+    .ubar .ubb{margin-left:auto;background:rgba(34,213,117,.12);color:#22D575;font-size:.65rem;font-weight:800;padding:3px 9px;border-radius:50px;border:1px solid rgba(34,213,117,.25);}
+    .fw{display:none;}.fw.show{display:block;}
+    .field{margin-bottom:14px;}
+    .field label{display:block;font-size:.73rem;font-weight:800;color:var(--mt);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;}
+    .field label span{color:var(--pk);}
+    .field input[type=text],.field input[type=tel],.field input[type=url]{width:100%;background:rgba(255,255,255,.04);border:1.5px solid var(--br);border-radius:10px;padding:11px 14px;color:var(--tx);font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:600;outline:none;transition:border-color .2s,background .2s;}
+    .field input:focus{border-color:var(--pu);background:rgba(168,85,247,.05);}
+    .field input::placeholder{color:rgba(139,127,170,.4);}
+    .field input[readonly]{background:rgba(168,85,247,.05);border-color:rgba(168,85,247,.25);color:var(--mt);}
+    .igw{position:relative;}
+    .igpfx{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--sp);font-weight:800;font-size:.88rem;}
+    .igw input{padding-left:26px!important;}
+    .chk{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:rgba(255,225,53,.04);border:1px solid rgba(255,225,53,.18);border-radius:10px;cursor:pointer;}
+    .chk input[type=checkbox]{width:17px;height:17px;accent-color:var(--o);cursor:pointer;flex-shrink:0;margin-top:2px;}
+    .chk span{font-size:.78rem;color:var(--mt);line-height:1.55;}
+    .chk span strong{color:var(--y);}
+    .btn-sub{width:100%;background:linear-gradient(135deg,var(--o),var(--pk));color:#fff;border:none;padding:14px;border-radius:12px;font-family:'Paytone One',sans-serif;font-size:.98rem;cursor:pointer;margin-top:18px;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 26px rgba(255,107,53,.3);}
+    .btn-sub:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(255,61,138,.48);}
+    .btn-sub:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+    .pre-login{text-align:center;padding:14px 0;color:var(--mt);font-size:.82rem;}
+    .modal-ov{position:fixed;inset:0;background:rgba(10,7,24,.88);backdrop-filter:blur(10px);z-index:999;display:flex;align-items:center;justify-content:center;padding:22px;opacity:0;pointer-events:none;transition:opacity .3s;}
+    .modal-ov.show{opacity:1;pointer-events:all;}
+    .modal-bx{background:var(--card2);border:1px solid rgba(168,85,247,.35);border-radius:20px;padding:32px 24px;max-width:320px;width:100%;text-align:center;transform:scale(.9);transition:transform .3s;position:relative;overflow:hidden;}
+    .modal-ov.show .modal-bx{transform:scale(1);}
+    .modal-bx::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--y),var(--o),var(--pk),var(--pu));}
+    .modal-ico{font-size:3rem;margin-bottom:11px;}
+    .modal-bx h3{font-family:'Paytone One',sans-serif;font-size:1.25rem;margin-bottom:8px;background:linear-gradient(90deg,var(--y),var(--o));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .modal-bx p{font-size:.84rem;color:var(--mt);line-height:1.6;margin-bottom:20px;}
+    .modal-btn{display:block;width:100%;background:linear-gradient(135deg,var(--pu),var(--pk));color:#fff;border:none;padding:13px;border-radius:10px;font-family:'Paytone One',sans-serif;font-size:.88rem;cursor:pointer;text-decoration:none;transition:transform .2s;}
+    .modal-btn:hover{transform:scale(1.02);}
+    footer{text-align:center;padding:26px 24px;color:var(--mt);font-size:.74rem;border-top:1px solid var(--br);}
+    footer strong{color:var(--y);}
+    @keyframes fuUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+    .fi{opacity:0;transform:translateY(20px);transition:opacity .55s ease,transform .55s ease;}
+    .fi.vis{opacity:1;transform:none;}
+  </style>
+</head>
+<body>
+<div class="bb b1"></div><div class="bb b2"></div><div class="bb b3"></div>
+<div class="noise"></div>
+
+<nav>
+  <div class="nav-logo">Yippi! 🌟</div>
+  <div class="nav-acts" id="navActs">
+    <a href="leaderboard.html" class="nav-btn">👑 Leaderboard</a>
+  </div>
+</nav>
+
+<div class="content">
+  <section class="hero">
+    <div class="dco" style="top:18%;left:7%;animation-delay:0s">🍦</div>
+    <div class="dco" style="top:24%;right:9%;animation-delay:1s">✨</div>
+    <div class="dco" style="bottom:22%;left:11%;animation-delay:2s">🎉</div>
+    <div class="dco" style="bottom:28%;right:7%;animation-delay:.6s">🔥</div>
+    <div class="badge">Event Bulanan · Gratis!</div>
+    <h1 class="hero-h">Yippi!<br><span class="gt">Spill &amp; Chill</span> 🍦✨</h1>
+    <p class="hero-sub">Nongkrong aesthetic, nge-spill racun, dapet <strong>Rp 500.000</strong> tiap bulan!</p>
+    <div class="hero-cta">
+      <a href="#daftar" class="btn-p">Daftar Sekarang 🚀</a>
+      <a href="leaderboard.html" class="btn-o">Cek Leaderboard 👑</a>
+    </div>
+    <div class="prize-chip"><p>Total Hadiah Tiap Bulan</p><strong>Rp 500.000</strong></div>
+    <div class="scroll-hint"><span>Scroll</span><span>↓</span></div>
+  </section>
+
+  <div class="dvdr"></div>
+  <section class="sec fi">
+    <div class="sec-lbl">Cara Main</div>
+    <div class="sec-ttl">3 Langkah Gampang 🎯</div>
+    <div class="steps">
+      <div class="sc"><div class="sn s1">1</div><div class="si"><h3>Datang &amp; Ngonten 📸</h3><p>Hadir di event Yippi!, buat konten aesthetic, upload ke TikTok atau IG kamu.</p></div></div>
+      <div class="sc"><div class="sn s2">2</div><div class="si"><h3>Daftar via Google &amp; Isi Form 📝</h3><p>Login Google, masukkan username Instagram &amp; link video. Data aman &amp; terlacak otomatis!</p></div></div>
+      <div class="sc"><div class="sn s3">3</div><div class="si"><h3>Pantau Dashboard &amp; Menang 🏆</h3><p>Update bukti di dashboard, tunggu validasi admin, dan lihat poinmu naik di leaderboard!</p></div></div>
+    </div>
+    <div class="pills">
+      <div class="pill psv"><span>💾 1 Save</span><span class="pts">= 3 Poin</span></div>
+      <div class="pill psh"><span>↗️ 1 Share</span><span class="pts">= 5 Poin</span></div>
+    </div>
+  </section>
+
+  <div class="dvdr"></div>
+  <section class="sec fi">
+    <div class="sec-lbl">Alur Lengkap</div>
+    <div class="sec-ttl">Gimana Cara Kerjanya? 🔄</div>
+    <div class="flow">
+      <div class="fi2"><div class="fdot fd1">🔑</div><div class="ft"><h4>Login dengan Google</h4><p>Klik "Lanjut dengan Google". Aman, cepat, tanpa password baru.</p><span class="fbadge fbg">Google Sign-In</span></div></div>
+      <div class="fi2"><div class="fdot fd2">📝</div><div class="ft"><h4>Isi Form &amp; Username Instagram</h4><p>Lengkapi nama, WA, username IG, dan link video kontenmu.</p><span class="fbadge fbi">@Instagram Username</span></div></div>
+      <div class="fi2"><div class="fdot fd3">⏳</div><div class="ft"><h4>Status Waiting — Admin Verifikasi</h4><p>Poin masuk ke dashboard dengan status <strong>Waiting</strong>. Admin Google Sheets akan mengecek insight.</p><span class="fbadge fbd">Dashboard Peserta</span></div></div>
+      <div class="fi2"><div class="fdot fd4">✅</div><div class="ft"><h4>Synchronized — Poin Naik!</h4><p>Setelah disetujui admin, status berubah jadi <strong>Synchronized</strong> dan poin tampil di leaderboard.</p><span class="fbadge fbd">Live Leaderboard</span></div></div>
+    </div>
+  </section>
+
+  <div class="dvdr"></div>
+  <section class="sec fi" id="daftar" style="padding-bottom:70px;">
+    <div class="sec-lbl">Daftar Sekarang</div>
+    <div class="sec-ttl">Isi Form Pendaftaran 📝</div>
+    <div class="auth-gate" id="authGate">
+      <div class="ag-title">Siap Gabung? 🚀</div>
+      <p class="ag-sub">Login dulu pakai Google biar data kamu aman &amp; bisa akses dashboard peserta untuk pantau poin.</p>
+      <button class="gbtn" id="googleBtn" onclick="triggerGoogle()">
+        <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Lanjut dengan Google
+      </button>
+      <div class="dor">sudah login? form langsung muncul</div>
+      <div class="ubar" id="uBar">
+        <img id="uAvatar" src="" alt="avatar"/>
+        <div><div class="ubn" id="uName">—</div><div class="ube" id="uEmail">—</div></div>
+        <span class="ubb">✓ Masuk</span>
+      </div>
+      <div class="fw" id="fWrap">
+        <div class="field"><label>Email Google (otomatis)</label><input type="text" id="fEmail" readonly placeholder="Dari akun Google kamu"/></div>
+        <div class="field"><label>Nama Panggilan <span>*</span></label><input type="text" id="fNama" placeholder="Contoh: Nara, Gio, Putri..."/></div>
+        <div class="field"><label>Nomor WhatsApp <span>*</span></label><input type="tel" id="fWA" placeholder="08123456789"/></div>
+        <div class="field"><label>Username Instagram <span>*</span></label><div class="igw"><span class="igpfx">@</span><input type="text" id="fIG" placeholder="usernamekamu"/></div></div>
+        <div class="field"><label>Link Video Konten <span>*</span></label><input type="url" id="fLink" placeholder="https://tiktok.com/... atau https://instagram.com/..."/></div>
+        <div class="field"><label class="chk"><input type="checkbox" id="fAgree"/><span>Akun saya <strong>tidak di-private</strong> &amp; sudah follow <strong>@yippiyuk</strong> ✅</span></label></div>
+        <button class="btn-sub" id="subBtn" onclick="submitForm()">Gas Join Sekarang! 🚀</button>
+      </div>
+      <div class="pre-login" id="preLogin">👆 Login Google dulu untuk bisa mengisi form pendaftaran</div>
+    </div>
+  </section>
+
+  <footer><p>Made with ❤️ by <strong>Yippi!</strong> · Scale-up People's Happiness 🌟</p><p style="margin-top:5px">© 2025 Yippi! · All rights reserved</p></footer>
+</div>
+
+<div class="modal-ov" id="modal">
+  <div class="modal-bx">
+    <div class="modal-ico">🎉</div>
+    <h3>Yeay, Berhasil!</h3>
+    <p>Pendaftaranmu masuk! Status poin sekarang <strong>⏳ Waiting</strong> sambil admin verifikasi. Pantau di dashboard ya!</p>
+    <a href="dashboard.html" class="modal-btn">📊 Buka Dashboard Saya</a>
+  </div>
+</div>
+
+<!-- Ganti YOUR_GOOGLE_CLIENT_ID dengan Client ID dari Google Cloud Console -->
+<div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com" data-callback="handleGoogle" data-auto_select="false" data-ux_mode="popup"></div>
+
+<script>
+  const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+  const SHEET_REG_URL = 'YOUR_APPS_SCRIPT_REGISTER_URL';
+
+  let user = null;
+
+  window.addEventListener('load', () => {
+    const s = sessionStorage.getItem('yippi_user');
+    if (s) { user = JSON.parse(s); onSignedIn(user); }
+    refreshNav();
+  });
+
+  function triggerGoogle() {
+    if (user) { showForm(); return; }
+    if (typeof google !== 'undefined' && GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com') {
+      google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogle });
+      google.accounts.id.prompt();
+    } else { demoLogin(); }
+  }
+
+  function handleGoogle(resp) {
+    const p = parseJwt(resp.credential);
+    user = { name: p.name, email: p.email, picture: p.picture, sub: p.sub };
+    sessionStorage.setItem('yippi_user', JSON.stringify(user));
+    onSignedIn(user);
+  }
+
+  function demoLogin() {
+    user = { name: 'Demo User', email: 'demo@gmail.com', picture: 'https://ui-avatars.com/api/?name=Demo+User&background=A855F7&color=fff&bold=true', sub: 'demo_' + Date.now() };
+    sessionStorage.setItem('yippi_user', JSON.stringify(user));
+    onSignedIn(user);
+  }
+
+  function onSignedIn(u) {
+    const ub = document.getElementById('uBar'); ub.classList.add('show');
+    document.getElementById('uAvatar').src = u.picture || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(u.name) + '&background=A855F7&color=fff';
+    document.getElementById('uName').textContent = u.name;
+    document.getElementById('uEmail').textContent = u.email;
+    document.getElementById('fEmail').value = u.email;
+    const gb = document.getElementById('googleBtn'); gb.classList.add('ok');
+    gb.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="none" stroke="#22D575" stroke-width="2.5"/><path d="M8 12l3 3 5-5" stroke="#22D575" stroke-width="2" fill="none" stroke-linecap="round"/></svg> Masuk sebagai ${u.name.split(' ')[0]}`;
+    showForm(); refreshNav();
+  }
+
+  function showForm() {
+    document.getElementById('fWrap').classList.add('show');
+    document.getElementById('preLogin').style.display = 'none';
+  }
+
+  function refreshNav() {
+    const n = document.getElementById('navActs');
+    if (user) n.innerHTML = `<a href="dashboard.html" class="nav-dash">📊 Dashboard</a><a href="leaderboard.html" class="nav-btn">👑 Leaderboard</a>`;
+    else n.innerHTML = `<a href="leaderboard.html" class="nav-btn">👑 Leaderboard</a>`;
+  }
+
+  async function submitForm() {
+    if (!user) { alert('Login dulu ya!'); return; }
+    const nama = document.getElementById('fNama').value.trim();
+    const wa = document.getElementById('fWA').value.trim();
+    const ig = document.getElementById('fIG').value.trim().replace('@','');
+    const link = document.getElementById('fLink').value.trim();
+    const agree = document.getElementById('fAgree').checked;
+    if (!nama || !wa || !ig || !link) { alert('Semua field wajib diisi ya!'); return; }
+    if (!agree) { alert('Centang persetujuan dulu!'); return; }
+    const btn = document.getElementById('subBtn'); btn.disabled = true; btn.textContent = 'Lagi diproses... ⏳';
+    const payload = { googleId: user.sub, email: user.email, googleName: user.name, nama, wa, ig:'@'+ig, link, timestamp: new Date().toLocaleString('id-ID'), status: 'waiting', poin: 0, saves: 0, shares: 0 };
+    localStorage.setItem('yippi_reg_' + user.sub, JSON.stringify(payload));
+    try {
+      if (SHEET_REG_URL !== 'YOUR_APPS_SCRIPT_REGISTER_URL') await fetch(SHEET_REG_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+      document.getElementById('modal').classList.add('show');
+    } catch(e) { alert('Ada error. Coba lagi! 😅'); }
+    finally { btn.disabled = false; btn.textContent = 'Gas Join Sekarang! 🚀'; }
+  }
+
+  function parseJwt(t) {
+    const b = t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+    return JSON.parse(decodeURIComponent(atob(b).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));
+  }
+
+  const fis = document.querySelectorAll('.fi');
+  new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');}),{threshold:.12}).observe.bind(new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');}),{threshold:.12}));
+  const obs = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');}),{threshold:.12});
+  fis.forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard · Yippi! Spill & Chill</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Paytone+One&display=swap" rel="stylesheet"/>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    :root{--y:#FFE135;--o:#FF6B35;--pk:#FF3D8A;--pu:#A855F7;--cy:#00D4FF;--gr:#22D575;--dk:#0A0718;--card:#13102A;--card2:#1C1740;--tx:#F0EBFF;--mt:#8B7FAA;--br:rgba(168,85,247,.22);--sp:#E4405F;}
+    *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+    body{font-family:'Nunito',sans-serif;background:var(--dk);color:var(--tx);overflow-x:hidden;}
+    .bb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(80px);}
+    .b1{width:50vw;height:50vw;top:-15%;right:-15%;background:radial-gradient(circle,rgba(168,85,247,.18),transparent 70%);}
+    .b2{width:40vw;height:40vw;bottom:-10%;left:-10%;background:radial-gradient(circle,rgba(0,212,255,.12),transparent 70%);}
+    .noise{position:fixed;inset:0;opacity:.033;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none;z-index:1;}
+    nav{position:sticky;top:0;z-index:200;display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:rgba(10,7,24,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--br);}
+    .nav-logo{font-family:'Paytone One',sans-serif;font-size:1.2rem;background:linear-gradient(90deg,var(--y),var(--o));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .nav-acts{display:flex;gap:8px;align-items:center;}
+    .nav-a{color:var(--mt);font-size:.75rem;font-weight:800;text-decoration:none;padding:7px 13px;border-radius:50px;transition:color .2s;border:1px solid transparent;}
+    .nav-a:hover{color:var(--tx);border-color:var(--br);}
+    .nav-a.active{background:rgba(168,85,247,.12);border-color:rgba(168,85,247,.3);color:var(--pu);}
+    .content{position:relative;z-index:2;max-width:480px;margin:0 auto;padding:0 18px 80px;}
+
+    /* AUTH WALL */
+    .auth-wall{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 0;}
+    .aw-icon{font-size:3.5rem;margin-bottom:16px;}
+    .aw-title{font-family:'Paytone One',sans-serif;font-size:1.6rem;margin-bottom:8px;}
+    .aw-sub{font-size:.85rem;color:var(--mt);margin-bottom:28px;line-height:1.6;max-width:300px;}
+    .gbtn{display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:#3c4043;border:none;padding:13px 24px;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:box-shadow .2s,transform .2s;box-shadow:0 2px 10px rgba(0,0,0,.2);}
+    .gbtn:hover{box-shadow:0 4px 20px rgba(0,0,0,.28);transform:translateY(-1px);}
+    .gbtn svg{width:19px;height:19px;}
+
+    /* PAGE HEADER */
+    .pg-header{padding:24px 0 20px;}
+    .pg-welcome{font-size:.78rem;color:var(--mt);font-weight:700;margin-bottom:4px;}
+    .pg-name{font-family:'Paytone One',sans-serif;font-size:1.6rem;line-height:1.1;}
+    .pg-name span{background:linear-gradient(90deg,var(--y),var(--o));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .pg-email{font-size:.76rem;color:var(--mt);margin-top:4px;}
+
+    /* PROFILE CARD */
+    .profile-card{background:var(--card);border:1px solid var(--br);border-radius:18px;padding:18px;display:flex;align-items:center;gap:14px;margin-bottom:16px;position:relative;overflow:hidden;}
+    .profile-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--pu),var(--pk));}
+    .pc-avatar{width:52px;height:52px;border-radius:50%;border:3px solid rgba(168,85,247,.4);flex-shrink:0;}
+    .pc-info{flex:1;min-width:0;}
+    .pc-name{font-weight:800;font-size:.95rem;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .pc-ig{font-size:.76rem;color:var(--sp);font-weight:700;}
+    .pc-wa{font-size:.72rem;color:var(--mt);margin-top:2px;}
+    .pc-edit{background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.28);color:var(--pu);padding:6px 13px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.72rem;cursor:pointer;flex-shrink:0;transition:all .2s;text-decoration:none;}
+    .pc-edit:hover{background:rgba(168,85,247,.2);}
+
+    /* NOT REGISTERED */
+    .not-reg{text-align:center;padding:28px;background:var(--card);border:1px solid var(--br);border-radius:18px;margin-bottom:16px;}
+    .not-reg p{font-size:.85rem;color:var(--mt);margin-bottom:16px;line-height:1.6;}
+    .btn-reg{display:inline-block;background:linear-gradient(135deg,var(--o),var(--pk));color:#fff;border:none;padding:12px 24px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;text-decoration:none;transition:transform .2s;}
+    .btn-reg:hover{transform:scale(1.03);}
+
+    /* STATS GRID */
+    .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+    .stat-card{background:var(--card);border:1px solid var(--br);border-radius:16px;padding:16px;position:relative;overflow:hidden;}
+    .stat-card.wide{grid-column:1/-1;}
+    .stat-card::after{content:'';position:absolute;top:-20px;right:-20px;width:70px;height:70px;border-radius:50%;opacity:.12;pointer-events:none;}
+    .sc-pts::after{background:var(--y);}
+    .sc-sv::after{background:var(--cy);}
+    .sc-sh::after{background:var(--pk);}
+    .sc-rank::after{background:var(--pu);}
+    .stat-lbl{font-size:.68rem;font-weight:800;color:var(--mt);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;}
+    .stat-val{font-family:'Paytone One',sans-serif;font-size:1.8rem;line-height:1;}
+    .stat-val.gold{color:var(--y);}
+    .stat-val.cyan{color:var(--cy);}
+    .stat-val.pink{color:var(--pk);}
+    .stat-val.pu{color:var(--pu);}
+    .stat-sub{font-size:.7rem;color:var(--mt);margin-top:4px;}
+    .stat-formula{font-size:.7rem;color:var(--mt);margin-top:3px;}
+
+    /* STATUS BADGE */
+    .status-section{margin-bottom:16px;}
+    .status-card{background:var(--card);border-radius:16px;padding:18px;position:relative;overflow:hidden;}
+    .status-card.waiting{border:1.5px solid rgba(255,225,53,.3);background:rgba(255,225,53,.04);}
+    .status-card.synchronized{border:1.5px solid rgba(34,213,117,.3);background:rgba(34,213,117,.04);}
+    .status-card.rejected{border:1.5px solid rgba(255,61,138,.3);background:rgba(255,61,138,.04);}
+    .sc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+    .sc-title{font-weight:800;font-size:.88rem;}
+    .status-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:50px;font-size:.72rem;font-weight:800;letter-spacing:.5px;}
+    .sb-waiting{background:rgba(255,225,53,.12);border:1px solid rgba(255,225,53,.35);color:var(--y);}
+    .sb-sync{background:rgba(34,213,117,.1);border:1px solid rgba(34,213,117,.3);color:var(--gr);}
+    .sb-rej{background:rgba(255,61,138,.1);border:1px solid rgba(255,61,138,.3);color:var(--pk);}
+    .sb-dot{width:6px;height:6px;border-radius:50%;}
+    .sb-dot.waiting{background:var(--y);animation:pulse .9s infinite;}
+    .sb-dot.sync{background:var(--gr);}
+    .sb-dot.rej{background:var(--pk);}
+    @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+    .sc-body{font-size:.8rem;color:var(--mt);line-height:1.6;}
+    .sc-body strong{color:var(--tx);}
+    .sc-timestamp{font-size:.7rem;color:var(--mt);margin-top:8px;font-weight:600;}
+
+    /* HISTORY */
+    .history-section{margin-bottom:16px;}
+    .sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+    .sec-hd h3{font-family:'Paytone One',sans-serif;font-size:1rem;}
+    .history-list{display:flex;flex-direction:column;gap:8px;}
+    .hist-item{background:var(--card);border:1px solid var(--br);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;}
+    .hi-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;}
+    .hi-icon.wait{background:rgba(255,225,53,.1);}
+    .hi-icon.sync{background:rgba(34,213,117,.1);}
+    .hi-icon.rej{background:rgba(255,61,138,.1);}
+    .hi-info{flex:1;min-width:0;}
+    .hi-title{font-size:.82rem;font-weight:800;}
+    .hi-time{font-size:.7rem;color:var(--mt);margin-top:2px;}
+    .hi-pts{font-family:'Paytone One',sans-serif;font-size:1rem;color:var(--pu);text-align:right;flex-shrink:0;}
+    .hi-pts.green{color:var(--gr);}
+
+    /* UPDATE FORM */
+    .update-section{margin-bottom:16px;}
+    .update-card{background:var(--card);border:1px solid var(--br);border-radius:18px;padding:20px;position:relative;overflow:hidden;}
+    .update-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--o),var(--pk),var(--pu));}
+    .uc-title{font-family:'Paytone One',sans-serif;font-size:1.1rem;margin-bottom:4px;}
+    .uc-sub{font-size:.78rem;color:var(--mt);margin-bottom:18px;line-height:1.5;}
+    .hint-box{background:rgba(255,107,53,.06);border:1px solid rgba(255,107,53,.22);border-radius:10px;padding:11px 13px;margin-bottom:16px;font-size:.78rem;color:var(--mt);line-height:1.55;}
+    .hint-box strong{color:var(--o);}
+    .field{margin-bottom:13px;}
+    .field label{display:block;font-size:.71rem;font-weight:800;color:var(--mt);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;}
+    .field label span{color:var(--pk);}
+    .field input[type=number]{width:100%;background:rgba(255,255,255,.04);border:1.5px solid var(--br);border-radius:10px;padding:11px 13px;color:var(--tx);font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:600;outline:none;transition:border-color .2s;}
+    .field input:focus{border-color:var(--o);}
+    .field input::placeholder{color:rgba(139,127,170,.4);}
+    .irow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .poin-prev{background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.18);border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+    .pp-lbl{font-size:.76rem;color:var(--mt);font-weight:700;}
+    .pp-formula{font-size:.68rem;color:var(--mt);margin-top:2px;}
+    .pp-pts{font-family:'Paytone One',sans-serif;font-size:1.35rem;color:var(--cy);}
+    /* UPLOAD */
+    .upload-area{border:2px dashed var(--br);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative;}
+    .upload-area:hover,.upload-area.over{border-color:var(--pu);background:rgba(168,85,247,.06);}
+    .upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+    .ua-icon{font-size:1.7rem;margin-bottom:6px;}
+    .ua-txt{font-weight:800;font-size:.84rem;}
+    .ua-sub{font-size:.72rem;color:var(--mt);margin-top:3px;}
+    .ua-prev{font-size:.76rem;color:var(--cy);margin-top:7px;font-weight:700;}
+    .btn-upd{width:100%;background:linear-gradient(135deg,var(--o),var(--pk));color:#fff;border:none;padding:14px;border-radius:12px;font-family:'Paytone One',sans-serif;font-size:.96rem;cursor:pointer;margin-top:16px;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 24px rgba(255,107,53,.28);}
+    .btn-upd:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(255,61,138,.45);}
+    .btn-upd:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+
+    /* LOGOUT */
+    .logout-btn{width:100%;background:rgba(255,61,138,.06);border:1px solid rgba(255,61,138,.2);color:var(--pk);padding:12px;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer;transition:all .2s;margin-top:8px;}
+    .logout-btn:hover{background:rgba(255,61,138,.12);}
+
+    /* MODAL */
+    .modal-ov{position:fixed;inset:0;background:rgba(10,7,24,.88);backdrop-filter:blur(10px);z-index:999;display:flex;align-items:center;justify-content:center;padding:22px;opacity:0;pointer-events:none;transition:opacity .3s;}
+    .modal-ov.show{opacity:1;pointer-events:all;}
+    .modal-bx{background:var(--card2);border:1px solid rgba(168,85,247,.35);border-radius:20px;padding:30px 22px;max-width:310px;width:100%;text-align:center;transform:scale(.9);transition:transform .3s;position:relative;overflow:hidden;}
+    .modal-ov.show .modal-bx{transform:scale(1);}
+    .modal-bx::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--o),var(--pk),var(--pu));}
+    .m-ico{font-size:2.8rem;margin-bottom:10px;}
+    .modal-bx h3{font-family:'Paytone One',sans-serif;font-size:1.2rem;margin-bottom:7px;background:linear-gradient(90deg,var(--o),var(--pk));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .modal-bx p{font-size:.82rem;color:var(--mt);line-height:1.6;margin-bottom:18px;}
+    .m-btn{display:block;width:100%;background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);color:var(--pu);padding:12px;border-radius:10px;font-family:'Paytone One',sans-serif;font-size:.86rem;cursor:pointer;transition:all .2s;}
+    .m-btn:hover{background:rgba(168,85,247,.22);color:#fff;}
+
+    /* EMPTY */
+    .empty{text-align:center;padding:20px;color:var(--mt);font-size:.8rem;}
+
+    footer{text-align:center;padding:24px;color:var(--mt);font-size:.72rem;border-top:1px solid var(--br);margin-top:16px;}
+    footer strong{color:var(--y);}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+    .fi{opacity:0;transform:translateY(16px);transition:opacity .45s ease,transform .45s ease;}
+    .fi.vis{opacity:1;transform:none;}
+  </style>
+</head>
+<body>
+<div class="bb b1"></div><div class="bb b2"></div>
+<div class="noise"></div>
+
+<nav>
+  <div class="nav-logo">Yippi! 🌟</div>
+  <div class="nav-acts">
+    <a href="index.html" class="nav-a">🏠 Home</a>
+    <a href="leaderboard.html" class="nav-a">👑 Board</a>
+    <a href="dashboard.html" class="nav-a active">📊 Dashboard</a>
+  </div>
+</nav>
+
+<div class="content">
+
+  <!-- AUTH WALL -->
+  <div class="auth-wall" id="authWall">
+    <div class="aw-icon">🔐</div>
+    <div class="aw-title">Login Dulu Yuk!</div>
+    <p class="aw-sub">Dashboard peserta hanya bisa diakses setelah login dengan akun Google kamu.</p>
+    <button class="gbtn" onclick="triggerGoogle()">
+      <svg viewBox="0 0 24 24" width="19" height="19"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Masuk dengan Google
+    </button>
+  </div>
+
+  <!-- DASHBOARD (hidden until login) -->
+  <div id="dashContent" style="display:none;">
+
+    <!-- PAGE HEADER -->
+    <div class="pg-header fi">
+      <div class="pg-welcome">Selamat datang kembali 👋</div>
+      <div class="pg-name">Halo, <span id="dashName">—</span>!</div>
+      <div class="pg-email" id="dashEmail">—</div>
+    </div>
+
+    <!-- PROFILE CARD -->
+    <div class="profile-card fi" id="profileCard" style="display:none;">
+      <img class="pc-avatar" id="pcAvatar" src="" alt="avatar"/>
+      <div class="pc-info">
+        <div class="pc-name" id="pcName">—</div>
+        <div class="pc-ig" id="pcIG">—</div>
+        <div class="pc-wa" id="pcWA">—</div>
+      </div>
+      <a href="index.html#daftar" class="pc-edit">Edit</a>
+    </div>
+
+    <!-- NOT REGISTERED -->
+    <div class="not-reg fi" id="notReg">
+      <div style="font-size:2.5rem;margin-bottom:12px">📋</div>
+      <p>Kamu belum terdaftar sebagai peserta Spill & Chill. Yuk daftar dulu biar bisa ikutan kompetisi!</p>
+      <a href="index.html#daftar" class="btn-reg">Daftar Sekarang 🚀</a>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid fi" id="statsGrid" style="display:none;">
+      <div class="stat-card sc-pts">
+        <div class="stat-lbl">Total Poin</div>
+        <div class="stat-val gold" id="statPoin">0</div>
+        <div class="stat-sub">poin saat ini</div>
+      </div>
+      <div class="stat-card sc-rank">
+        <div class="stat-lbl">Posisi Ranking</div>
+        <div class="stat-val pu" id="statRank">#—</div>
+        <div class="stat-sub">di leaderboard</div>
+      </div>
+      <div class="stat-card sc-sv">
+        <div class="stat-lbl">Total Saves</div>
+        <div class="stat-val cyan" id="statSaves">0</div>
+        <div class="stat-formula" id="savesFormula">0 × 3 = 0 poin</div>
+      </div>
+      <div class="stat-card sc-sh">
+        <div class="stat-lbl">Total Shares</div>
+        <div class="stat-val pink" id="statShares">0</div>
+        <div class="stat-formula" id="sharesFormula">0 × 5 = 0 poin</div>
+      </div>
+    </div>
+
+    <!-- STATUS -->
+    <div class="status-section fi" id="statusSection" style="display:none;">
+      <div class="sec-hd"><h3>📋 Status Pengajuan Terakhir</h3></div>
+      <div class="status-card" id="statusCard">
+        <div class="sc-header">
+          <div class="sc-title">Update Poin</div>
+          <div class="status-badge" id="statusBadge">
+            <span class="sb-dot waiting"></span> <span>Waiting</span>
+          </div>
+        </div>
+        <div class="sc-body" id="statusBody">
+          Menunggu validasi dari admin. Admin akan mengecek insight kontenmu di Google Sheets.
+        </div>
+        <div class="sc-timestamp" id="statusTime">—</div>
+      </div>
+    </div>
+
+    <!-- TIMELINE / HISTORY -->
+    <div class="history-section fi" id="historySection" style="display:none;">
+      <div class="sec-hd"><h3>📜 Riwayat Update</h3></div>
+      <div class="history-list" id="historyList"></div>
+    </div>
+
+    <!-- UPDATE FORM -->
+    <div class="update-section fi" id="updateSection" style="display:none;">
+      <div class="update-card">
+        <div class="uc-title">Update Bukti Insight 📊</div>
+        <p class="uc-sub">Poin kamu naik? Kirim bukti insight terbaru biar admin bisa verifikasi!</p>
+        <div class="hint-box">💡 <strong>Cara kerja:</strong> Isi jumlah Saves & Shares terbaru → Upload screenshot insight → Submit → Admin Google Sheets akan ubah status jadi <strong>Synchronized</strong> setelah verifikasi.</div>
+        <div class="irow">
+          <div class="field"><label>Jumlah Saves <span>*</span></label><input type="number" id="uSaves" placeholder="0" min="0" oninput="calcPoin()"/></div>
+          <div class="field"><label>Jumlah Shares <span>*</span></label><input type="number" id="uShares" placeholder="0" min="0" oninput="calcPoin()"/></div>
+        </div>
+        <div class="poin-prev">
+          <div><div class="pp-lbl">Total Poin Baru</div><div class="pp-formula" id="ppFormula">Isi data dulu</div></div>
+          <div class="pp-pts" id="ppPts">—</div>
+        </div>
+        <div class="field" style="margin-top:12px;">
+          <label>Screenshot Insight <span>*</span></label>
+          <div class="upload-area" id="uploadArea">
+            <input type="file" id="uFile" accept="image/*"/>
+            <div class="ua-icon">📸</div>
+            <div class="ua-txt">Tap untuk upload screenshot</div>
+            <div class="ua-sub">JPG / PNG · Maks 5MB</div>
+            <div class="ua-prev" id="uPrev"></div>
+          </div>
+        </div>
+        <button class="btn-upd" id="updBtn" onclick="submitUpdate()">Update Poin Saya! 🔥</button>
+      </div>
+    </div>
+
+    <!-- LOGOUT -->
+    <div class="fi" id="logoutWrap" style="display:none;">
+      <button class="logout-btn" onclick="logout()">⬅ Keluar dari Akun</button>
+    </div>
+
+  </div><!-- /dashContent -->
+
+  <footer><p>Made with ❤️ by <strong>Yippi!</strong> · Scale-up People's Happiness 🌟</p></footer>
+</div>
+
+<!-- MODAL -->
+<div class="modal-ov" id="modal">
+  <div class="modal-bx">
+    <div class="m-ico">⏳</div>
+    <h3>Bukti Terkirim!</h3>
+    <p>Admin akan segera verifikasi insight kamu. Status akan berubah jadi <strong>✅ Synchronized</strong> setelah disetujui!</p>
+    <button class="m-btn" onclick="closeModal()">Oke, Siap! 🙌</button>
+  </div>
+</div>
+
+<!-- Ganti YOUR_GOOGLE_CLIENT_ID -->
+<div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com" data-callback="handleGoogle" data-auto_select="false" data-ux_mode="popup"></div>
+
+<script>
+  // ============================================================
+  // CONFIG
+  // ============================================================
+  const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+  const SHEET_UPDATE_URL = 'YOUR_APPS_SCRIPT_UPDATE_URL';
+  const SHEET_STATUS_URL = 'YOUR_APPS_SCRIPT_STATUS_URL'; // GET endpoint to check status by googleId
+  // ============================================================
+
+  let user = null;
+  let regData = null;
+
+  window.addEventListener('load', () => {
+    const s = sessionStorage.getItem('yippi_user');
+    if (s) { user = JSON.parse(s); initDashboard(); }
+  });
+
+  function triggerGoogle() {
+    if (typeof google !== 'undefined' && GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com') {
+      google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogle });
+      google.accounts.id.prompt();
+    } else { demoLogin(); }
+  }
+
+  function handleGoogle(resp) {
+    const p = parseJwt(resp.credential);
+    user = { name: p.name, email: p.email, picture: p.picture, sub: p.sub };
+    sessionStorage.setItem('yippi_user', JSON.stringify(user));
+    initDashboard();
+  }
+
+  function demoLogin() {
+    user = { name: 'Demo User', email: 'demo@gmail.com', picture: 'https://ui-avatars.com/api/?name=Demo+User&background=A855F7&color=fff&bold=true', sub: 'demo_test' };
+    sessionStorage.setItem('yippi_user', JSON.stringify(user));
+    // create demo reg data
+    const demo = { googleId: user.sub, email: user.email, googleName: user.name, nama: 'Demo User', wa: '08123456789', ig: '@demouser', link: 'https://tiktok.com/@demouser', timestamp: new Date().toLocaleString('id-ID'), status: 'waiting', poin: 45, saves: 5, shares: 6 };
+    localStorage.setItem('yippi_reg_' + user.sub, JSON.stringify(demo));
+    // Add some history
+    const hist = [
+      { type: 'waiting', saves: 5, shares: 6, poin: 45, time: new Date().toLocaleString('id-ID'), note: 'Menunggu validasi admin' },
+      { type: 'sync', saves: 2, shares: 3, poin: 21, time: new Date(Date.now() - 86400000).toLocaleString('id-ID'), note: 'Admin: Terverifikasi ✅' }
+    ];
+    localStorage.setItem('yippi_hist_' + user.sub, JSON.stringify(hist));
+    initDashboard();
+  }
+
+  async function initDashboard() {
+    document.getElementById('authWall').style.display = 'none';
+    document.getElementById('dashContent').style.display = 'block';
+    document.getElementById('dashName').textContent = user.name.split(' ')[0];
+    document.getElementById('dashEmail').textContent = user.email;
+
+    // Load reg data
+    regData = JSON.parse(localStorage.getItem('yippi_reg_' + user.sub) || 'null');
+
+    // Try fetch from backend
+    if (SHEET_STATUS_URL !== 'YOUR_APPS_SCRIPT_STATUS_URL') {
+      try {
+        const r = await fetch(SHEET_STATUS_URL + '?googleId=' + encodeURIComponent(user.sub));
+        const d = await r.json();
+        if (d && d.googleId) { regData = d; localStorage.setItem('yippi_reg_' + user.sub, JSON.stringify(d)); }
+      } catch(e) { /* use local */ }
+    }
+
+    if (regData) {
+      showRegisteredUI();
+    } else {
+      document.getElementById('notReg').style.display = 'block';
+      document.getElementById('logoutWrap').style.display = 'block';
+    }
+
+    observeFi();
+  }
+
+  function showRegisteredUI() {
+    // Profile card
+    const pc = document.getElementById('profileCard'); pc.style.display = 'flex';
+    document.getElementById('pcAvatar').src = user.picture || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name) + '&background=A855F7&color=fff';
+    document.getElementById('pcName').textContent = regData.nama;
+    document.getElementById('pcIG').textContent = regData.ig;
+    document.getElementById('pcWA').textContent = '📱 ' + regData.wa;
+    document.getElementById('notReg').style.display = 'none';
+
+    // Stats
+    const sg = document.getElementById('statsGrid'); sg.style.display = 'grid';
+    const poin = parseInt(regData.poin) || 0;
+    const saves = parseInt(regData.saves) || 0;
+    const shares = parseInt(regData.shares) || 0;
+    document.getElementById('statPoin').textContent = poin.toLocaleString('id-ID');
+    document.getElementById('statSaves').textContent = saves.toLocaleString('id-ID');
+    document.getElementById('statShares').textContent = shares.toLocaleString('id-ID');
+    document.getElementById('savesFormula').textContent = saves + ' × 3 = ' + (saves*3) + ' poin';
+    document.getElementById('sharesFormula').textContent = shares + ' × 5 = ' + (shares*5) + ' poin';
+
+    // Rank (estimate from leaderboard if available)
+    document.getElementById('statRank').textContent = '#?';
+
+    // Status
+    const ss = document.getElementById('statusSection'); ss.style.display = 'block';
+    updateStatusUI(regData.status || 'waiting', regData.timestamp, regData.adminNote);
+
+    // History
+    renderHistory();
+
+    // Update form
+    document.getElementById('updateSection').style.display = 'block';
+    document.getElementById('logoutWrap').style.display = 'block';
+  }
+
+  function updateStatusUI(status, time, note) {
+    const card = document.getElementById('statusCard');
+    const badge = document.getElementById('statusBadge');
+    const body = document.getElementById('statusBody');
+    const ts = document.getElementById('statusTime');
+
+    card.className = 'status-card ' + status;
+
+    if (status === 'waiting') {
+      badge.className = 'status-badge sb-waiting';
+      badge.innerHTML = '<span class="sb-dot waiting"></span> ⏳ Waiting';
+      body.innerHTML = 'Menunggu validasi dari admin. Admin akan mengecek insight kontenmu melalui Google Sheets. <strong>Biasanya 1×24 jam.</strong>';
+    } else if (status === 'synchronized') {
+      badge.className = 'status-badge sb-sync';
+      badge.innerHTML = '<span class="sb-dot sync"></span> ✅ Synchronized';
+      body.innerHTML = 'Poinmu sudah diverifikasi dan tersinkronisasi ke leaderboard! ' + (note ? '<br><strong>Admin: ' + escHtml(note) + '</strong>' : '');
+    } else if (status === 'rejected') {
+      badge.className = 'status-badge sb-rej';
+      badge.innerHTML = '<span class="sb-dot rej"></span> ❌ Ditolak';
+      body.innerHTML = 'Pengajuan ini ditolak admin. ' + (note ? '<strong>Alasan: ' + escHtml(note) + '</strong>' : 'Silakan upload ulang dengan screenshot yang lebih jelas.');
+    }
+    ts.textContent = '📅 ' + (time || '—');
+  }
+
+  function renderHistory() {
+    const sec = document.getElementById('historySection');
+    const list = document.getElementById('historyList');
+    const hist = JSON.parse(localStorage.getItem('yippi_hist_' + user.sub) || '[]');
+    if (!hist.length) { list.innerHTML = '<div class="empty">Belum ada riwayat update poin.</div>'; }
+    else {
+      sec.style.display = 'block';
+      list.innerHTML = '';
+      hist.slice().reverse().forEach(h => {
+        const el = document.createElement('div'); el.className = 'hist-item';
+        const iconMap = { waiting:'⏳', sync:'✅', rejected:'❌' };
+        const clsMap = { waiting:'wait', sync:'sync', rejected:'rej' };
+        el.innerHTML = `
+          <div class="hi-icon ${clsMap[h.type]||'wait'}">${iconMap[h.type]||'⏳'}</div>
+          <div class="hi-info">
+            <div class="hi-title">${h.note || 'Update poin'}</div>
+            <div class="hi-time">${h.time} · ${h.saves} saves · ${h.shares} shares</div>
+          </div>
+          <div class="hi-pts ${h.type==='sync'?'green':''}">${h.poin > 0 ? '+'+h.poin : h.poin}</div>
+        `;
+        list.appendChild(el);
+      });
+    }
+    sec.style.display = hist.length ? 'block' : 'none';
+  }
+
+  function calcPoin() {
+    const s = parseInt(document.getElementById('uSaves').value) || 0;
+    const sh = parseInt(document.getElementById('uShares').value) || 0;
+    const total = s*3 + sh*5;
+    document.getElementById('ppPts').textContent = total > 0 ? total.toLocaleString('id-ID') : '—';
+    document.getElementById('ppFormula').textContent = total > 0 ? s+'×3 + '+sh+'×5 = '+total+' poin' : 'Isi data dulu';
+  }
+
+  document.getElementById('uFile').addEventListener('change', function() {
+    document.getElementById('uPrev').textContent = this.files[0] ? '✅ ' + this.files[0].name : '';
+  });
+  const ua = document.getElementById('uploadArea');
+  ua.addEventListener('dragover', e=>{e.preventDefault();ua.classList.add('over');});
+  ua.addEventListener('dragleave', ()=>ua.classList.remove('over'));
+  ua.addEventListener('drop', e=>{e.preventDefault();ua.classList.remove('over');const f=e.dataTransfer.files[0];if(f){document.getElementById('uFile').files=e.dataTransfer.files;document.getElementById('uPrev').textContent='✅ '+f.name;}});
+
+  async function submitUpdate() {
+    if (!regData) { alert('Daftar dulu ya!'); return; }
+    const saves = parseInt(document.getElementById('uSaves').value)||0;
+    const shares = parseInt(document.getElementById('uShares').value)||0;
+    const file = document.getElementById('uFile').files[0];
+    if (!saves && !shares) { alert('Isi jumlah saves atau shares dulu!'); return; }
+    if (!file) { alert('Upload screenshot insight dulu ya!'); return; }
+
+    const btn = document.getElementById('updBtn'); btn.disabled=true; btn.textContent='Lagi diproses... ⏳';
+    const poin = saves*3 + shares*5;
+    const ts = new Date().toLocaleString('id-ID');
+
+    const payload = { googleId: user.sub, email: user.email, nama: regData.nama, ig: regData.ig, wa: regData.wa, saves, shares, poin, timestamp: ts, status: 'waiting' };
+
+    // Update local data to waiting
+    regData.saves = saves; regData.shares = shares; regData.poin = poin; regData.status = 'waiting'; regData.timestamp = ts;
+    localStorage.setItem('yippi_reg_' + user.sub, JSON.stringify(regData));
+
+    // Add to history
+    const hist = JSON.parse(localStorage.getItem('yippi_hist_' + user.sub) || '[]');
+    hist.push({ type:'waiting', saves, shares, poin, time:ts, note:'Menunggu validasi admin' });
+    localStorage.setItem('yippi_hist_' + user.sub, JSON.stringify(hist));
+
+    try {
+      if (SHEET_UPDATE_URL !== 'YOUR_APPS_SCRIPT_UPDATE_URL') {
+        const fd = new FormData();
+        Object.entries(payload).forEach(([k,v])=>fd.append(k,v));
+        fd.append('screenshot', file);
+        await fetch(SHEET_UPDATE_URL, { method:'POST', mode:'no-cors', body:fd });
+      }
+      document.getElementById('modal').classList.add('show');
+      updateStatusUI('waiting', ts);
+      document.getElementById('uSaves').value=''; document.getElementById('uShares').value='';
+      document.getElementById('uPrev').textContent=''; document.getElementById('ppPts').textContent='—';
+      document.getElementById('ppFormula').textContent='Isi data dulu';
+      renderHistory();
+    } catch(e) { alert('Ada error. Coba lagi! 😅'); }
+    finally { btn.disabled=false; btn.textContent='Update Poin Saya! 🔥'; }
+  }
+
+  function closeModal() { document.getElementById('modal').classList.remove('show'); }
+
+  function logout() {
+    sessionStorage.removeItem('yippi_user');
+    window.location.href = 'index.html';
+  }
+
+  function parseJwt(t) {
+    const b = t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+    return JSON.parse(decodeURIComponent(atob(b).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));
+  }
+
+  function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function observeFi() {
+    const obs = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');}),{threshold:.1});
+    document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
+  }
+</script>
+</body>
+</html>

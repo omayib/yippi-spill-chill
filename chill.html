@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Leaderboard · Yippi! Spill & Chill 👑</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Paytone+One&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--y:#FFE135;--o:#FF6B35;--pk:#FF3D8A;--pu:#A855F7;--cy:#00D4FF;--gr:#22D575;--dk:#0A0718;--card:#13102A;--card2:#1C1740;--tx:#F0EBFF;--mt:#8B7FAA;--br:rgba(168,85,247,.22);--gold:#FFD700;--silver:#C0C0C0;--bronze:#CD7F32;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Nunito',sans-serif;background:var(--dk);color:var(--tx);overflow-x:hidden;}
+    .bb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(80px);}
+    .b1{width:55vw;height:55vw;top:-15%;right:-15%;background:radial-gradient(circle,rgba(168,85,247,.18),transparent 70%);}
+    .b2{width:45vw;height:45vw;bottom:-10%;left:-10%;background:radial-gradient(circle,rgba(255,215,0,.08),transparent 70%);}
+    .noise{position:fixed;inset:0;opacity:.033;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none;z-index:1;}
+    nav{position:sticky;top:0;z-index:200;display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:rgba(10,7,24,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--br);}
+    .nav-logo{font-family:'Paytone One',sans-serif;font-size:1.2rem;background:linear-gradient(90deg,var(--y),var(--o));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .nav-acts{display:flex;gap:8px;align-items:center;}
+    .nav-a{color:var(--mt);font-size:.74rem;font-weight:800;text-decoration:none;padding:7px 12px;border-radius:50px;transition:color .2s;border:1px solid transparent;}
+    .nav-a:hover{color:var(--tx);border-color:var(--br);}
+    .nav-a.active{background:rgba(255,215,0,.08);border-color:rgba(255,215,0,.25);color:var(--gold);}
+    .content{position:relative;z-index:2;max-width:480px;margin:0 auto;padding:0 18px 80px;}
+
+    /* PAGE HEADER */
+    .pg-header{text-align:center;padding:28px 0 22px;}
+    .pg-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.28);color:var(--gold);font-size:.67rem;font-weight:800;padding:4px 13px;border-radius:50px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;}
+    .live-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse .9s infinite;}
+    @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+    .pg-header h1{font-family:'Paytone One',sans-serif;font-size:clamp(1.7rem,7vw,2.6rem);line-height:1.1;}
+    .pg-header h1 span{background:linear-gradient(90deg,var(--gold),var(--o));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .pg-header p{font-size:.8rem;color:var(--mt);margin-top:6px;}
+
+    /* PODIUM */
+    .podium-wrap{margin-bottom:24px;}
+    .podium{display:flex;align-items:flex-end;justify-content:center;gap:10px;}
+    .pi{flex:1;max-width:130px;display:flex;flex-direction:column;align-items:center;gap:7px;}
+    .p-crown{font-size:1.2rem;}
+    .p-av{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Paytone One',sans-serif;font-size:1.25rem;border:3px solid transparent;}
+    .p-av.r1{border-color:var(--gold);background:rgba(255,215,0,.12);width:62px;height:62px;font-size:1.55rem;}
+    .p-av.r2{border-color:var(--silver);background:rgba(192,192,192,.08);}
+    .p-av.r3{border-color:var(--bronze);background:rgba(205,127,50,.08);}
+    .p-name{font-weight:800;font-size:.74rem;text-align:center;max-width:100px;word-break:break-word;}
+    .p-pts{font-family:'Paytone One',sans-serif;font-size:.84rem;}
+    .p-pts.r1{color:var(--gold);font-size:.95rem;}
+    .p-pts.r2{color:var(--silver);}
+    .p-pts.r3{color:var(--bronze);}
+    .p-block{width:100%;border-radius:10px 10px 0 0;display:flex;align-items:center;justify-content:center;}
+    .p-block.r1{height:64px;background:linear-gradient(180deg,rgba(255,215,0,.22),rgba(255,215,0,.06));border:1px solid rgba(255,215,0,.28);border-bottom:none;}
+    .p-block.r2{height:48px;background:linear-gradient(180deg,rgba(192,192,192,.16),rgba(192,192,192,.04));border:1px solid rgba(192,192,192,.18);border-bottom:none;}
+    .p-block.r3{height:34px;background:linear-gradient(180deg,rgba(205,127,50,.18),rgba(205,127,50,.04));border:1px solid rgba(205,127,50,.18);border-bottom:none;}
+    .p-rn{font-family:'Paytone One',sans-serif;font-size:1.1rem;opacity:.55;}
+
+    /* LIST */
+    .lb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+    .lb-header h2{font-family:'Paytone One',sans-serif;font-size:1rem;}
+    .refresh-btn{background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.28);color:var(--pu);padding:5px 12px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.72rem;cursor:pointer;transition:all .2s;}
+    .refresh-btn:hover{background:rgba(168,85,247,.2);}
+    .lb-list{display:flex;flex-direction:column;gap:7px;margin-bottom:24px;}
+    .lb-item{background:var(--card);border:1px solid var(--br);border-radius:13px;padding:13px 15px;display:flex;align-items:center;gap:12px;transition:transform .2s,border-color .2s;animation:slideIn .4s ease both;}
+    .lb-item:hover{transform:translateX(3px);border-color:rgba(168,85,247,.42);}
+    .lb-item.t1{border-color:rgba(255,215,0,.35);background:rgba(255,215,0,.04);}
+    .lb-item.t2{border-color:rgba(192,192,192,.25);}
+    .lb-item.t3{border-color:rgba(205,127,50,.25);}
+    @keyframes slideIn{from{opacity:0;transform:translateX(-12px);}to{opacity:1;transform:translateX(0);}}
+    .lb-rank{width:30px;flex-shrink:0;text-align:center;font-family:'Paytone One',sans-serif;font-size:.95rem;}
+    .lb-rank.g{color:var(--gold);}
+    .lb-rank.s{color:var(--silver);}
+    .lb-rank.b{color:var(--bronze);}
+    .lb-rank.n{color:var(--mt);font-size:.8rem;}
+    .lb-info{flex:1;min-width:0;}
+    .lb-name{font-weight:800;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .lb-ig{font-size:.72rem;color:var(--mt);margin-top:2px;}
+    .lb-pts{text-align:right;flex-shrink:0;}
+    .lb-pts .pn{font-family:'Paytone One',sans-serif;font-size:1.1rem;}
+    .lb-pts.g .pn{color:var(--gold);}
+    .lb-pts.s .pn{color:var(--silver);}
+    .lb-pts.b .pn{color:var(--bronze);}
+    .lb-pts.n .pn{color:var(--pu);}
+    .lb-pts .pl{font-size:.65rem;color:var(--mt);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+    .lb-status{margin-left:8px;}
+    .sync-badge{display:inline-block;background:rgba(34,213,117,.1);border:1px solid rgba(34,213,117,.25);color:var(--gr);font-size:.6rem;font-weight:800;padding:2px 7px;border-radius:50px;}
+    .wait-badge{display:inline-block;background:rgba(255,225,53,.1);border:1px solid rgba(255,225,53,.22);color:var(--y);font-size:.6rem;font-weight:800;padding:2px 7px;border-radius:50px;}
+    .lb-loading{text-align:center;padding:36px;color:var(--mt);font-size:.85rem;}
+    .spinner{width:30px;height:30px;border:3px solid var(--br);border-top-color:var(--pu);border-radius:50%;margin:0 auto 12px;animation:spin .8s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .empty-lb{text-align:center;padding:32px;background:var(--card);border:1px solid var(--br);border-radius:16px;color:var(--mt);font-size:.85rem;}
+
+    /* DVDR */
+    .dvdr{height:1px;background:linear-gradient(90deg,transparent,var(--br),transparent);margin:28px 0;}
+
+    /* MY RANK */
+    .my-rank-card{background:var(--card2);border:1.5px solid rgba(168,85,247,.35);border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;margin-bottom:24px;position:relative;overflow:hidden;}
+    .my-rank-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--pu),var(--pk));}
+    .mrc-icon{font-size:1.8rem;flex-shrink:0;}
+    .mrc-info{flex:1;}
+    .mrc-label{font-size:.7rem;color:var(--mt);font-weight:700;text-transform:uppercase;letter-spacing:.8px;}
+    .mrc-val{font-family:'Paytone One',sans-serif;font-size:1.5rem;color:var(--pu);}
+    .mrc-sub{font-size:.74rem;color:var(--mt);margin-top:2px;}
+    .mrc-btn{background:linear-gradient(135deg,var(--pu),var(--pk));color:#fff;border:none;padding:9px 16px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.76rem;cursor:pointer;text-decoration:none;transition:transform .2s;flex-shrink:0;}
+    .mrc-btn:hover{transform:scale(1.04);}
+
+    footer{text-align:center;padding:24px;color:var(--mt);font-size:.72rem;border-top:1px solid var(--br);}
+    footer strong{color:var(--y);}
+    .fi{opacity:0;transform:translateY(16px);transition:opacity .45s,transform .45s;}
+    .fi.vis{opacity:1;transform:none;}
+  </style>
+</head>
+<body>
+<div class="bb b1"></div><div class="bb b2"></div>
+<div class="noise"></div>
+
+<nav>
+  <div class="nav-logo">Yippi! 🌟</div>
+  <div class="nav-acts">
+    <a href="index.html" class="nav-a">🏠 Home</a>
+    <a href="dashboard.html" class="nav-a" id="navDash">📊 Dashboard</a>
+    <a href="leaderboard.html" class="nav-a active">👑 Board</a>
+  </div>
+</nav>
+
+<div class="content">
+
+  <div class="pg-header fi">
+    <div class="pg-badge"><span class="live-dot"></span> Live Update</div>
+    <h1>👑 Live Leaderboard<br><span>Top Spiller</span></h1>
+    <p>Update setiap kali admin validasi poin peserta</p>
+  </div>
+
+  <!-- PODIUM -->
+  <div class="podium-wrap fi" id="podiumWrap" style="display:none;">
+    <div class="podium" id="podium"></div>
+  </div>
+
+  <!-- MY RANK (if logged in & registered) -->
+  <div class="my-rank-card fi" id="myRankCard" style="display:none;">
+    <div class="mrc-icon">🎯</div>
+    <div class="mrc-info">
+      <div class="mrc-label">Posisi Kamu</div>
+      <div class="mrc-val" id="myRankVal">#—</div>
+      <div class="mrc-sub" id="myRankPts">— poin</div>
+    </div>
+    <a href="dashboard.html" class="mrc-btn">Update Poin</a>
+  </div>
+
+  <!-- LIST -->
+  <div class="fi">
+    <div class="lb-header">
+      <h2>🏆 Semua Peserta</h2>
+      <button class="refresh-btn" onclick="loadLB()">↻ Refresh</button>
+    </div>
+    <div class="lb-list" id="lbList">
+      <div class="lb-loading"><div class="spinner"></div><p>Memuat data...</p></div>
+    </div>
+  </div>
+
+  <footer><p>Made with ❤️ by <strong>Yippi!</strong> · Scale-up People's Happiness 🌟</p></footer>
+</div>
+
+<script>
+  // ============================================================
+  const LEADERBOARD_API = 'YOUR_LEADERBOARD_API_URL'; // GET → returns [{nama,ig,poin,status}]
+  // ============================================================
+
+  const SAMPLE = [
+    {nama:'Nara',ig:'@narafoodie',poin:285,status:'synchronized'},
+    {nama:'Gio',ig:'@giocontentz',poin:240,status:'synchronized'},
+    {nama:'Putri',ig:'@putri.aesthetic',poin:198,status:'synchronized'},
+    {nama:'Reza',ig:'@rezavlog',poin:170,status:'waiting'},
+    {nama:'Mila',ig:'@milasnaps',poin:155,status:'synchronized'},
+    {nama:'Dinda',ig:'@dindatalk',poin:122,status:'synchronized'},
+    {nama:'Budi',ig:'@budicreates',poin:98,status:'waiting'},
+  ];
+
+  let lbData = [];
+  let user = null;
+  let regData = null;
+
+  window.addEventListener('load', () => {
+    const s = sessionStorage.getItem('yippi_user');
+    if (s) { user = JSON.parse(s); regData = JSON.parse(localStorage.getItem('yippi_reg_' + user.sub) || 'null'); }
+    loadLB();
+    if (user) document.getElementById('navDash').style.fontWeight = '800';
+  });
+
+  async function loadLB() {
+    document.getElementById('lbList').innerHTML = '<div class="lb-loading"><div class="spinner"></div><p>Memuat data...</p></div>';
+    lbData = SAMPLE;
+    if (LEADERBOARD_API !== 'YOUR_LEADERBOARD_API_URL') {
+      try { const r = await fetch(LEADERBOARD_API); lbData = await r.json(); } catch(e) {}
+    }
+    lbData.sort((a,b)=>b.poin-a.poin);
+    render();
+  }
+
+  function render() {
+    const list = document.getElementById('lbList');
+    if (!lbData.length) { list.innerHTML = '<div class="empty-lb">Belum ada peserta terdaftar. Jadilah yang pertama! 🚀</div>'; return; }
+
+    list.innerHTML = '';
+    lbData.forEach((item,i) => {
+      const rank = i+1;
+      const rCls = rank===1?'t1':rank===2?'t2':rank===3?'t3':'';
+      const rClr = rank===1?'g':rank===2?'s':rank===3?'b':'n';
+      const rIcon = rank===1?'👑':rank===2?'🥈':rank===3?'🥉':rank;
+      const statusBadge = item.status==='synchronized' ? '<span class="sync-badge">✅ Sync</span>' : '<span class="wait-badge">⏳</span>';
+      const el = document.createElement('div'); el.className = `lb-item ${rCls}`; el.style.animationDelay = i*.06+'s';
+      el.innerHTML = `
+        <div class="lb-rank ${rClr}">${rIcon}</div>
+        <div class="lb-info">
+          <div class="lb-name">${esc(item.nama)}</div>
+          <div class="lb-ig">${esc(item.ig)} <span class="lb-status">${statusBadge}</span></div>
+        </div>
+        <div class="lb-pts ${rClr}">
+          <div class="pn">${parseInt(item.poin).toLocaleString('id-ID')}</div>
+          <div class="pl">Poin</div>
+        </div>
+      `;
+      list.appendChild(el);
+    });
+
+    renderPodium();
+    renderMyRank();
+  }
+
+  function renderPodium() {
+    if (lbData.length < 3) return;
+    const pw = document.getElementById('podiumWrap'); pw.style.display='block';
+    const pod = document.getElementById('podium'); pod.innerHTML='';
+    const order = [lbData[1], lbData[0], lbData[2]];
+    const rnks = [2,1,3]; const rcls=['r2','r1','r3']; const crowns=['🥈','👑','🥉'];
+    order.forEach((item,i) => {
+      const init = item.nama?item.nama.charAt(0).toUpperCase():'?';
+      const d = document.createElement('div'); d.className='pi';
+      d.innerHTML=`<div class="p-crown">${crowns[i]}</div><div class="p-av ${rcls[i]}">${init}</div><div class="p-name">${esc(item.nama)}</div><div class="p-pts ${rcls[i]}">${parseInt(item.poin).toLocaleString('id-ID')} pts</div><div class="p-block ${rcls[i]}"><span class="p-rn">#${rnks[i]}</span></div>`;
+      pod.appendChild(d);
+    });
+  }
+
+  function renderMyRank() {
+    if (!regData) return;
+    const idx = lbData.findIndex(x => x.ig === regData.ig || x.nama === regData.nama);
+    if (idx < 0) return;
+    const rank = idx+1;
+    const card = document.getElementById('myRankCard'); card.style.display='flex';
+    document.getElementById('myRankVal').textContent = '#'+rank;
+    document.getElementById('myRankPts').textContent = parseInt(regData.poin).toLocaleString('id-ID') + ' poin · ' + (regData.status==='synchronized'?'✅ Synchronized':'⏳ Waiting');
+  }
+
+  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  const obs = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');}),{threshold:.1});
+  document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

@@ -174,7 +174,7 @@
 <nav>
   <div class="nav-logo">Yippi! 🌟</div>
   <div class="nav-acts">
-    <a href="index.html" class="nav-a">🏠 Home</a>
+    <a href="spill.html" class="nav-a">🏠 Home</a>
     <a href="leaderboard.html" class="nav-a">👑 Board</a>
     <a href="dashboard.html" class="nav-a active">📊 Dashboard</a>
   </div>
@@ -317,15 +317,15 @@
 </div>
 
 <!-- Ganti YOUR_GOOGLE_CLIENT_ID -->
-<div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com" data-callback="handleGoogle" data-auto_select="false" data-ux_mode="popup"></div>
+<div id="g_id_onload" data-client_id="114393524490-7qbq1cl80rhtjlbvdhpf3b0gu8ustbb7.apps.googleusercontent.com" data-callback="handleGoogle" data-auto_select="false" data-ux_mode="popup"></div>
 
 <script>
   // ============================================================
   // CONFIG
   // ============================================================
-  const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
-  const SHEET_UPDATE_URL = 'YOUR_APPS_SCRIPT_UPDATE_URL';
-  const SHEET_STATUS_URL = 'YOUR_APPS_SCRIPT_STATUS_URL'; // GET endpoint to check status by googleId
+  const GOOGLE_CLIENT_ID = '114393524490-7qbq1cl80rhtjlbvdhpf3b0gu8ustbb7.apps.googleusercontent.com';
+  const SHEET_UPDATE_URL = 'https://script.google.com/macros/s/AKfycbw73ry4y7y5dayCnvToRNprn0nWgbW-X17bFLISpBfnJ_Ubk3K4ZlflIa83B3sGzsbtIw/exec?action=update';
+  const SHEET_STATUS_URL = 'https://script.google.com/macros/s/AKfycbw73ry4y7y5dayCnvToRNprn0nWgbW-X17bFLISpBfnJ_Ubk3K4ZlflIa83B3sGzsbtIw/exec?action=status'; // GET endpoint to check status by googleId
   // ============================================================
 
   let user = null;
@@ -337,7 +337,7 @@
   });
 
   function triggerGoogle() {
-    if (typeof google !== 'undefined' && GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com') {
+    if (typeof google !== 'undefined' && GOOGLE_CLIENT_ID !== '114393524490-7qbq1cl80rhtjlbvdhpf3b0gu8ustbb7.apps.googleusercontent.com') {
       google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogle });
       google.accounts.id.prompt();
     } else { demoLogin(); }
@@ -375,7 +375,7 @@
     regData = JSON.parse(localStorage.getItem('yippi_reg_' + user.sub) || 'null');
 
     // Try fetch from backend
-    if (SHEET_STATUS_URL !== 'YOUR_APPS_SCRIPT_STATUS_URL') {
+    if (SHEET_STATUS_URL !== 'https://script.google.com/macros/s/AKfycbw73ry4y7y5dayCnvToRNprn0nWgbW-X17bFLISpBfnJ_Ubk3K4ZlflIa83B3sGzsbtIw/exec?action=status') {
       try {
         const r = await fetch(SHEET_STATUS_URL + '?googleId=' + encodeURIComponent(user.sub));
         const d = await r.json();
@@ -518,10 +518,11 @@
     localStorage.setItem('yippi_hist_' + user.sub, JSON.stringify(hist));
 
     try {
-      if (SHEET_UPDATE_URL !== 'YOUR_APPS_SCRIPT_UPDATE_URL') {
+      if (SHEET_UPDATE_URL !== 'https://script.google.com/macros/s/AKfycbw73ry4y7y5dayCnvToRNprn0nWgbW-X17bFLISpBfnJ_Ubk3K4ZlflIa83B3sGzsbtIw/exec?action=update') {
         const fd = new FormData();
         Object.entries(payload).forEach(([k,v])=>fd.append(k,v));
         fd.append('screenshot', file);
+        console.log("kirim update ke "+SHEET_UPDATE_URL)
         await fetch(SHEET_UPDATE_URL, { method:'POST', mode:'no-cors', body:fd });
       }
       document.getElementById('modal').classList.add('show');

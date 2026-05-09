@@ -225,11 +225,11 @@
 </div>
 
 <!-- Ganti YOUR_GOOGLE_CLIENT_ID dengan Client ID dari Google Cloud Console -->
-<div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com" data-callback="handleGoogle" data-auto_select="false" data-ux_mode="popup"></div>
+<div id="g_id_onload" data-client_id="114393524490-7qbq1cl80rhtjlbvdhpf3b0gu8ustbb7.apps.googleusercontent.com" data-callback="handleGoogle" data-auto_select="false" data-ux_mode="popup"></div>
 
 <script>
-  const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
-  const SHEET_REG_URL = 'YOUR_APPS_SCRIPT_REGISTER_URL';
+  const GOOGLE_CLIENT_ID = '114393524490-7qbq1cl80rhtjlbvdhpf3b0gu8ustbb7.apps.googleusercontent.com';
+  const SHEET_REG_URL = 'https://script.google.com/macros/s/AKfycbw73ry4y7y5dayCnvToRNprn0nWgbW-X17bFLISpBfnJ_Ubk3K4ZlflIa83B3sGzsbtIw/exec?action=register';//AKfycbw73ry4y7y5dayCnvToRNprn0nWgbW-X17bFLISpBfnJ_Ubk3K4ZlflIa83B3sGzsbtIw
 
   let user = null;
 
@@ -241,10 +241,12 @@
 
   function triggerGoogle() {
     if (user) { showForm(); return; }
-    if (typeof google !== 'undefined' && GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com') {
+    if (typeof google !== 'undefined' && GOOGLE_CLIENT_ID !== '114393524490-7qbq1cl80rhtjlbvdhpf3b0gu8ustbb7.apps.googleusercontent.com') {
       google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogle });
       google.accounts.id.prompt();
-    } else { demoLogin(); }
+    }else{
+      console.log("error signin google")
+    }
   }
 
   function handleGoogle(resp) {
@@ -295,7 +297,7 @@
     const payload = { googleId: user.sub, email: user.email, googleName: user.name, nama, wa, ig:'@'+ig, link, timestamp: new Date().toLocaleString('id-ID'), status: 'waiting', poin: 0, saves: 0, shares: 0 };
     localStorage.setItem('yippi_reg_' + user.sub, JSON.stringify(payload));
     try {
-      if (SHEET_REG_URL !== 'YOUR_APPS_SCRIPT_REGISTER_URL') await fetch(SHEET_REG_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+      if (SHEET_REG_URL !== 'https://script.google.com/macros/s/AKfycbw73ry4y7y5dayCnvToRNprn0nWgbW-X17bFLISpBfnJ_Ubk3K4ZlflIa83B3sGzsbtIw/exec') await fetch(SHEET_REG_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
       document.getElementById('modal').classList.add('show');
     } catch(e) { alert('Ada error. Coba lagi! 😅'); }
     finally { btn.disabled = false; btn.textContent = 'Gas Join Sekarang! 🚀'; }
